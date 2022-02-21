@@ -1,0 +1,22 @@
+.title {
+    font-size: 60px;
+}
+
+#todo-all .todos-block {
+    margin: 20px;
+}
+
+#todo-all th, #todo-all td {
+    border: 1px black solid;
+    text-align: center;
+    width: 100px;
+    padding: 5px 10px;
+}
+#todo-create .todo-form {
+    text-align: center;
+    margin: 20px;
+}
+
+#todo-create .todo-form div {
+    margin: 20px;
+}
