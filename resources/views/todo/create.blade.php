@@ -6,11 +6,7 @@
     <div class="title">
         {{$title}}
     </div>
-    <nav>
-        <a href="{{ url('/todo')}}">Get All Todos</a>
-        <a href="{{ url('/todo/create')}}">Create</a>
-        <a href="{{ url('/todo/update')}}">Update</a>
-    </nav>
+    @include('todo.nav')
     <div class="todo-form">
         <form id="todo-create-form" method="post" action="{{ url('/api/todo') }}">
             @csrf

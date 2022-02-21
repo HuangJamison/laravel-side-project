@@ -6,10 +6,7 @@
     <div class="title">
         {{$title}}
     </div>
-    <nav>
-        <a href="{{ url('/todo')}}">Get All Todos</a>
-        <a href="{{ url('/todo/create')}}">Create</a>
-    </nav>
+    @include('todo.nav')
     <table class="todos-block">
         <tr>
             <th>id</th>

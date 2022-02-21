@@ -5,12 +5,9 @@
     {{$title}}
 </h1>
 <div>
-    I did a Laravel side project to demo CRUD Todo by RESTful API.
-    Try and enjoy it.
-    Extension: Production pipleline, factory job allocation.
-    Have a working hours and name list to have an automation allocation to find the man who has the minimal job.
+    I did a Laravel side project to demo CRUD Todo by RESTful API. <br/>
+    Try and enjoy it. <br/>
+    Extension: Production pipleline, factory job allocation. <br/>
+    Have a working hours and name list to have an automation allocation to find the man who has the minimal job. <br/>
 </div>
-<nav>
-    <a href="{{ url('/todo')}}">Get All Todos</a>
-    <a href="{{ url('/todo/create')}}">Create</a>
-</nav>
+@include('todo.nav')
