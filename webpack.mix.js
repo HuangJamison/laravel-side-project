@@ -17,3 +17,8 @@ mix.styles([
     'resources/css/todo/all.css',
     'resources/css/todo/create.css',
 ], 'public/css/todo.css');
+
+mix.styles([
+    'resources/css/assigner/all.css',
+    'resources/css/assigner/create.css',
+], 'public/css/assigner.css');

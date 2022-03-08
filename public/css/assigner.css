@@ -1,0 +1,22 @@
+.title {
+    font-size: 60px;
+}
+
+#assigner-all .todos-block {
+    margin: 20px;
+}
+
+#assigner-all th, #assigner-all td {
+    border: 1px black solid;
+    text-align: center;
+    width: 100px;
+    padding: 5px 10px;
+}
+#assigner-create .assigner-form {
+    text-align: center;
+    margin: 20px;
+}
+
+#assigner-create .assigner-form div {
+    margin: 20px;
+}

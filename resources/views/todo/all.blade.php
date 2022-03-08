@@ -12,6 +12,7 @@
             <th>id</th>
             <th>content</th>
             <th>assigner</th>
+            <th>working_hours</th>
             <th>deadline</th>
             <th>is_completed</th>
             <th>completed_at</th>
@@ -30,7 +31,10 @@
                     {{ $todo->content ?? '' }}
                 </td>
                 <td>
-                    {{ $todo->assigner ?? '' }}
+                    {{ $todo->assigner->name ?? '' }}
+                </td>
+                <td>
+                    {{ $todo->working_hours ?? '' }}
                 </td>
                 <td>
                     {{ $todo->deadline ?? '' }}

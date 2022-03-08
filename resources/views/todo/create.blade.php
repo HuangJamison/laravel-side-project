@@ -15,10 +15,23 @@
                 Content: <input type="text" name="content" required />
             </div>
             <div>
-                Assigner: <input type="text" name="assigner" required />
+                Assigner: 
+                <select name="assigner_id" required>
+                    <option value="0">
+                        --- please choose ---
+                    </option>
+                    @foreach ($assigners as $assigner)
+                        <option value="{{ $assigner->id }}">
+                            {{ $assigner->name ?? '' }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div>
-                Content: <input type="date" name="deadline" required />
+                Deadline: <input type="date" name="deadline" required />
+            </div>
+            <div>
+                working_hours: <input type="number" name="working_hours" min="0" required />
             </div>
             <input type="submit" value="submit" />
         </form>
@@ -41,9 +54,17 @@
                         return;
                     }
                     alert('add new todo successfully!');
-                    window.location.href = "<?= url('/todo'); ?>";
+                    window.location.href = "<?= url('/todos'); ?>";
                 },
-                'failure': function(res) {
+                'error': function(res) {
+                    if  (res.status === 422 && res.responseJSON) {
+                        let error = '';
+                        Object.values(res.responseJSON.message).map((v, i) => {
+                            error += `${v}, `;
+                        });
+                        alert(error);
+                        return;
+                    } 
                     alert('add todo something wrong!!');
                 }
             })

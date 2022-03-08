@@ -15,6 +15,7 @@
                 <th>id</th>
                 <th>content</th>
                 <th>assigner</th>
+                <th>working_hours</th>
                 <th>deadline</th>
                 <th>is_completed</th>
                 <th>is_deleted</th>
@@ -27,7 +28,20 @@
                     <input type="text" name="content" value="{{ $todo->content }}" required />
                 </td>
                 <td>
-                    <input type="text" name="assigner" value="{{ $todo->assigner }}" required />
+                    Assigner: 
+                    <select name="assigner_id" required>
+                        <option value="0">
+                            --- please choose ---
+                        </option>
+                        @foreach ($assigners as $assigner)
+                            <option value="{{ $assigner->id }}" {{ $assigner->id === $todo->assigner_id ? 'selected' : '' }} >
+                                {{ $assigner->name ?? '' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="number" name="working_hours" value="{{ $todo->working_hours }}" required />
                 </td>
                 <td>
                     <input type="date" name="deadline" value="{{ $todo->deadline }}" required />
@@ -65,9 +79,17 @@
                         return;
                     }
                     alert('update todo successfully!');
-                    window.location.href = "<?= url('/todo'); ?>";
+                    window.location.href = "<?= url('/todos'); ?>";
                 },
-                'failure': function(res) {
+                'error': function(res) {
+                    if  (res.status === 422 && res.responseJSON) {
+                        let error = '';
+                        Object.values(res.responseJSON.message).map((v, i) => {
+                            error += `${v}, `;
+                        });
+                        alert(error);
+                        return;
+                    } 
                     alert('add todo something wrong!!');
                 }
             })

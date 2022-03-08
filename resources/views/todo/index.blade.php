@@ -5,9 +5,9 @@
     {{$title}}
 </h1>
 <div>
-    I did a Laravel side project to demo CRUD Todo by RESTful API. <br/>
-    Try and enjoy it. <br/>
+    I did a Laravel side project to demo CRUD Todos Pipeline by RESTful API. <br/>
+    You can allocate this task to assigners, also watch their workload. Try and enjoy it. <br/>
     Extension: Production pipleline, factory job allocation. <br/>
-    Have a working hours and name list to have an automation allocation to find the man who has the minimal job. <br/>
+    Next stage I want to do a feature to find person whose workload is minimal. You can allocate task by manual/auto system.
 </div>
 @include('todo.nav')
