@@ -21,24 +21,24 @@ class CrawlerService
     {
         $count = 0;
         $this->next_url = $url;
-        $crawler_data = [];
+        $crawlerData = [];
         while ($count < $page_count && $this->next_url !== '') {
             $res = $this->ptt_crawler_single($this->next_url);
             $this->next_url = $res['next_url'];
-            $crawler_data[] = $res['titles'];
+            $crawlerData[] = $res['titles'];
             $count ++;
         }
-        return $crawler_data;
+        return $crawlerData;
     }
 
     private function ptt_crawler_single($url)
     {
-        $my_crawler = new MyCrawler();
+        $myCrawler = new MyCrawler();
         Crawler\Crawler::create()
-            ->setCrawlObserver($my_crawler)
+            ->setCrawlObserver($myCrawler)
             ->setDelayBetweenRequests(500)
             ->setCurrentCrawlLimit(1)
             ->startCrawling($url);
-        return $my_crawler->data;
+        return $myCrawler->data;
     }
 }

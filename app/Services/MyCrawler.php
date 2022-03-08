@@ -16,20 +16,20 @@ class MyCrawler extends Crawler\CrawlObservers\CrawlObserver {
 
     public function crawled(UriInterface $url, ResponseInterface $response, ?UriInterface $foundOnUrl = null)
     {
-        $parse_url = parse_url($url);
-        $domain = $parse_url['host']; 
+        $parseUrl = parse_url($url);
+        $domain = $parseUrl['host']; 
         $domCrawler = new DomCrawler((string) $response->getBody());
         $titles = $domCrawler->filter('div[class="r-ent"]')->filter('div[class="title"]')->filter('a')->each(function ($tree, $i) {
             return $tree->text();
         });
-        $next_url = $domCrawler->filter('div[class="btn-group btn-group-paging"]')->filter('a')->eq(1)->first()->attr('href');
-        if (!empty($next_url)) {
-            $next_url = 'https://' . $domain . $next_url;
+        $nextUrl = $domCrawler->filter('div[class="btn-group btn-group-paging"]')->filter('a')->eq(1)->first()->attr('href');
+        if (!empty($nextUrl)) {
+            $nextUrl = 'https://' . $domain . $nextUrl;
         }
 
         $this->data = [
             'titles' => $titles,
-            'next_url' => $next_url
+            'next_url' => $nextUrl
         ];
     }
 
