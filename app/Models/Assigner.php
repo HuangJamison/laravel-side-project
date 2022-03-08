@@ -5,21 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Todo extends Model
+class Assigner extends Model
 {
     use HasFactory;
-        /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'content',
-        'assigner_id',
-        'deadline',
-        'working_hours',
-        'is_completed',
-        'completed_at',
+        'name',
         'is_deleted',
         'deleted_at',
         'updated_at',
@@ -30,7 +25,7 @@ class Todo extends Model
 
     protected $dates = ['updated_at', 'created_at'];
 
-    public function assigner() {
-        return $this->belongsTo(Assigner::class);
+    public function todos() {
+        return $this->hasMany(Todo::class);
     }
 }

@@ -7,24 +7,17 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class TodoRequest extends FormRequest
+class AssignerRequest extends FormRequest
 {
     protected $validator;
     protected $validation_rules;
 
     protected $store = [
-        'content' => 'required|string|max:20|min:1',
-        'assigner_id' => 'integer|min:1|required',
-        'deadline' => 'date_format:Y-m-d|required',
-        'working_hours' => 'integer|min:0|required',
+        'name' => 'required|string|max:20|min:1',
     ];
 
     protected $update = [
-        'content' => 'required|string|max:20|min:1',
-        'assigner_id' => 'integer|min:1|required',
-        'working_hours' => 'integer|min:0|required',
-        'deadline' => 'date_format:Y-m-d|required',
-        'is_completed' => 'required',
+        'name' => 'required|string|max:20|min:1',
         'is_deleted' => 'required',
     ];
 
@@ -66,11 +59,8 @@ class TodoRequest extends FormRequest
             'string' => ' :attribute 須為字串',
             'integer' => ' :attribute 須為整數',
             'max' => ' :attribute 最大為 :max 字元',
-            'working_hours.min' => ' :attribute 最小為 :min',
-            'assigner_id.min' => ' :attribute 最小為 :min',
             'min' => ' :attribute 不得低於 :min 字元',
             'unique' => ':attribute 資料須為單一',
-            'deadline.date_format' => '日期格式須符合 Y-m-d',
         ];
     }
 }

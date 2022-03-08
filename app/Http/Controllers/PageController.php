@@ -8,6 +8,8 @@ use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Route;
 use App\Services\CrawlerService;
 use GuzzleHttp\Client;
+use App\Models\Todo;
+use App\Models\Assigner;
 use Throwable;
 
 class PageController extends Controller
@@ -41,21 +43,21 @@ class PageController extends Controller
 
     public function crawler_titles(Request $request, CrawlerService $service)
     {
-        $post_data = $request->only([
+        $postData = $request->only([
             'url',
             'page_count'
         ]);
-        $crawler_result = $service->ptt_crawler($post_data['url'], $post_data['page_count']);
+        $crawlerResult = $service->ptt_crawler($postData['url'], $postData['page_count']);
         return response()->json([
             "message" => "ok",
-            "data" => $crawler_result
+            "data" => $crawlerResult
         ]);
     }
 
     public function todo_page()
     {
         $data = [
-            'title' => 'Todo List practice using RESTful API'
+            'title' => 'Todos Pipeline practice using RESTful API'
         ];
         return view('todo/index', $data);
     }
@@ -63,11 +65,11 @@ class PageController extends Controller
     public function todos()
     {
         try {
-            // take all todos
+            // take all todos/assigner
             $req = Request::create(url('api/todo'), 'GET');
             $res = Route::dispatch($req);
             $res = json_decode($res->getContent());
-            $todos = $res->data;
+            $todos = Todo::hydrate($res->data);
         } catch (\Exception $e) {
             throw new \Exception('Call GET api/todo/ with something wrong.');
         }
@@ -82,9 +84,15 @@ class PageController extends Controller
 
     public function todo_create()
     {
+        $req = Request::create(url('api/active_assigners'), 'GET');
+        $res = Route::dispatch($req);
+        $res = json_decode($res->getContent());
+        $assigners = $res->data;
         $data = [
-            'title' => 'Todo Create'
+            'title' => 'Todo Create',
+            'assigners' => $assigners
         ];
+        
         return view('todo/create', $data);
     }
 
@@ -99,15 +107,71 @@ class PageController extends Controller
             $res = Route::dispatch($req);
             $res = json_decode($res->getContent());
             $todo = $res->data;
+            $req = Request::create(url('api/active_assigners'), 'GET');
+            $res = Route::dispatch($req);
+            $res = json_decode($res->getContent());
+            $assigners = $res->data;
         } 
         catch (\Exception $e) {
             throw new \Exception("Not Found GET api/todo/{$id} with something wrong.");
         }
         $data = [
             'title' => 'Todo Edit',
-            'todo' => $todo
+            'todo' => $todo,
+            'assigners' => $assigners
         ];
 
         return view('todo/edit', $data);
+    }
+
+    public function assigners()
+    {
+        try {
+            // take all assigners
+            $req = Request::create(url('api/assigner'), 'GET');
+            $res = Route::dispatch($req);
+            $res = json_decode($res->getContent());
+            $assigners = Assigner::hydrate($res->data);
+        } catch (\Exception $e) {
+            throw new \Exception('Call GET api/assigner/ with something wrong.');
+        }
+
+        $data = [
+            'title' => 'Assigners workload List',
+            'assigners' => $assigners
+        ];
+
+        return view('assigner/all', $data);
+    }
+
+    public function assigner_create()
+    {
+        $data = [
+            'title' => 'Assigner Create'
+        ];
+        return view('assigner/create', $data);
+    }
+
+    public function assigner_edit($id)
+    {
+        if (!is_numeric($id)) {
+            throw new \Exception('input id is not numeric');
+        }
+        try {
+            // take  todo
+            $req = Request::create(url('api/assigner/' . $id), 'GET');
+            $res = Route::dispatch($req);
+            $res = json_decode($res->getContent());
+            $assigner = $res->data;
+        } 
+        catch (\Exception $e) {
+            throw new \Exception("Not Found GET api/todo/{$id} with something wrong.");
+        }
+        $data = [
+            'title' => 'Assigner Edit',
+            'assigner' => $assigner
+        ];
+
+        return view('assigner/edit', $data);
     }
 }

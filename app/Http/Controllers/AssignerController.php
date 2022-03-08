@@ -1,20 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
+
+namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Interfaces\TodoRepositoryInterface;
-use App\Http\Resources\TodoResource;
-use App\Http\Requests\TodoRequest;
+use App\Interfaces\AssignerRepositoryInterface;
+use App\Http\Resources\AssignerResource;
+use App\Http\Requests\AssignerRequest;
 use Carbon\Carbon;
 
-class TodoController extends Controller
+class AssignerController extends Controller
 {
-    private TodoRepositoryInterface $todoRepository;
-
-    public function __construct(TodoRepositoryInterface $todoRepository)
+    private AssignerRepositoryInterface $assignerRepository;
+    public function __construct(AssignerRepositoryInterface $assignerRepository)
     {
-        $this->todoRepository = $todoRepository;
+        $this->assignerRepository = $assignerRepository;
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +26,7 @@ class TodoController extends Controller
     {
         return response()->json([
             "message" => "ok",
-            "data" => new TodoResource($this->todoRepository->getAllTodos())
+            "data" => new AssignerResource($this->assignerRepository->getAllAssigners())
         ]);
     }
 
@@ -35,24 +36,21 @@ class TodoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TodoRequest $request): JsonResponse
+    public function store(AssignerRequest $request): JsonResponse
     {
         // store 前即檢查
         $storeData = $request->only([
-            'content',
-            'assigner_id',
-            'deadline',
-            'working_hours'
+            'name',
         ]);
-        $todo = $this->todoRepository->createTodo($storeData);
+        $assigner = $this->assignerRepository->createAssigner($storeData);
 
-        if (is_null($todo)) {
-            throw new \Exception('Can not store todo data.');
+        if (is_null($assigner)) {
+            throw new \Exception('Can not store assigner data.');
         }
         
         return response()->json([
             "message" => "ok",
-            "data" => new TodoResource($todo)
+            "data" => new AssignerResource($assigner)
         ]);
     }
 
@@ -68,14 +66,14 @@ class TodoController extends Controller
             throw new \Exception('input id is not numeric');
         }
 
-        $todo = $this->todoRepository->getTodoById($id);
-        if (is_null($todo)) {
-            throw new \Exception('Can not get todo data.');
+        $assigner = $this->assignerRepository->getAssignerById($id);
+        if (is_null($assigner)) {
+            throw new \Exception('Can not get assigner data.');
         }
 
         return response()->json([
             "message" => "ok",
-            "data" => new TodoResource($todo)
+            "data" => new AssignerResource($assigner)
         ]);
     }
 
@@ -86,41 +84,44 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TodoRequest $request, $id)
+    public function update(AssignerRequest $request, $id)
     {
         // update 前即檢查
         $updateData = $request->only([
-            'content',
-            'assigner_id',
-            'working_hours',
-            'deadline',
-            'is_completed',
+            'name',
+            'assigner',
             'is_deleted',
-            'completed_at',
             'deleted_at',
         ]);
         $now = Carbon::now();
-        if (!$updateData['is_completed']) {
-            $updateData['completed_at'] = null;
-        }
         if (!$updateData['is_deleted']) {
             $updateData['deleted_at'] = null;
-        }
-        if ($updateData['is_completed'] && is_null($updateData['completed_at'])) {
-            $update_data['completed_at'] = $now;
         }
         if ($updateData['is_deleted'] && is_null($updateData['deleted_at'])) {
             $updateData['deleted_at'] = $now;
         }
         $updateData['updated_at'] = $now;
-        $result = $this->todoRepository->updateTodo($id, $updateData);
+        $result = $this->assignerRepository->updateAssigner($id, $updateData);
         if (!$result) {
-            throw new \Exception('Can not update todo data.');
+            throw new \Exception('Can not update assigner data.');
         }
-        $todo = $this->todoRepository->getTodoById($id);
+        $assigner = $this->assignerRepository->getAssignerById($id);
         return response()->json([
             "message" => "ok",
-            "data" => new TodoResource($todo)
+            "data" => new AssignerResource($assigner)
+        ]);
+    }
+
+    /**
+     * get activeAssigners
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function activeAssigners()
+    {
+        return response()->json([
+            "message" => "ok",
+            "data" => new AssignerResource($this->assignerRepository->getAllActiveAssigners())
         ]);
     }
 }

@@ -6,23 +6,23 @@ use App\Models\Todo;
 
 class TodoRepository implements TodoRepositoryInterface
 {
-    public function get_all_todos()
+    public function getAllTodos()
     {
         return Todo::all();
     }
 
-    public function get_todo_by_id($todoId)
+    public function getTodoById($todoId)
     {
         return Todo::findOrFail($todoId);
     }
 
-    public function create_todo($todo)
+    public function createTodo(array $todo)
     {
         return Todo::create($todo);
     }
 
-    public function update_todo($todo_id, $todo)
+    public function updateTodo($todoId, array $todo)
     {
-        return Todo::whereId($todo_id)->update($todo);
+        return Todo::whereId($todoId)->update($todo);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTodosTable extends Migration
+class CreateAssignersAndAssignerTodoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class CreateTodosTable extends Migration
      */
     public function up()
     {
-        Schema::create('todos', function (Blueprint $table) {
+        Schema::create('assigners', function (Blueprint $table) {
             $table->increments('id')->unsigned();
-            $table->string('content', 20);
-            $table->unsignedBigInteger('assigner_id');
-            $table->integer('working_hours')->unsigned()->default(0);
-            $table->date('deadline');
-            $table->tinyInteger('is_completed')->default(0);
-            $table->dateTime('completed_at')->nullable();
+            $table->string('name', 20);
             $table->tinyInteger('is_deleted')->default(0);
             $table->softDeletes()->nullable();
             $table->timestamps();
@@ -34,6 +29,6 @@ class CreateTodosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('todos');
+        Schema::dropIfExists('assigners');
     }
 }
