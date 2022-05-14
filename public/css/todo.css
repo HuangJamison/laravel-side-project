@@ -20,3 +20,11 @@
 #todo-create .todo-form div {
     margin: 20px;
 }
+
+#todo-create .alert-wording {
+    color: red;
+}
+
+#todo-create .hide {
+    display: none;
+}

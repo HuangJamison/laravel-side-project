@@ -28,3 +28,5 @@ Route::resource('todo', TodoController::class);
 Route::resource('assigner', AssignerController::class);
 
 Route::get('active_assigners', [AssignerController::class, 'activeAssigners']);
+
+Route::get('min_workload_assigner', [AssignerController::class, 'getMinWorkloadAssigner']);

@@ -14,14 +14,14 @@ class TodoRequest extends FormRequest
 
     protected $store = [
         'content' => 'required|string|max:20|min:1',
-        'assigner_id' => 'integer|min:1|required',
+        'assigner_id' => 'integer|min:0|required',
         'deadline' => 'date_format:Y-m-d|required',
         'working_hours' => 'integer|min:0|required',
     ];
 
     protected $update = [
         'content' => 'required|string|max:20|min:1',
-        'assigner_id' => 'integer|min:1|required',
+        'assigner_id' => 'integer|min:0|required',
         'working_hours' => 'integer|min:0|required',
         'deadline' => 'date_format:Y-m-d|required',
         'is_completed' => 'required',

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Interfaces\AssignerRepositoryInterface;
@@ -47,7 +46,7 @@ class AssignerController extends Controller
         if (is_null($assigner)) {
             throw new \Exception('Can not store assigner data.');
         }
-        
+
         return response()->json([
             "message" => "ok",
             "data" => new AssignerResource($assigner)
@@ -122,6 +121,14 @@ class AssignerController extends Controller
         return response()->json([
             "message" => "ok",
             "data" => new AssignerResource($this->assignerRepository->getAllActiveAssigners())
+        ]);
+    }
+
+    public function getMinWorkloadAssigner()
+    {
+        return response()->json([
+            "message" => "ok",
+            "data" => new AssignerResource($this->assignerRepository->getMinWorkloadAssigner())
         ]);
     }
 }

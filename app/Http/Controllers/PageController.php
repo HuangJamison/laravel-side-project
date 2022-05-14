@@ -84,15 +84,19 @@ class PageController extends Controller
 
     public function todo_create()
     {
-        $req = Request::create(url('api/active_assigners'), 'GET');
-        $res = Route::dispatch($req);
-        $res = json_decode($res->getContent());
-        $assigners = $res->data;
+        try {
+            $req = Request::create(url('api/active_assigners'), 'GET');
+            $res = Route::dispatch($req);
+            $res = json_decode($res->getContent());
+            $assigners = $res->data;
+        } catch (\Exception $e) {
+            throw new \Exception("Not Found GET todo_create with something wrong.");
+        }
         $data = [
             'title' => 'Todo Create',
-            'assigners' => $assigners
+            'assigners' => $assigners ?: []
         ];
-        
+
         return view('todo/create', $data);
     }
 
@@ -111,8 +115,7 @@ class PageController extends Controller
             $res = Route::dispatch($req);
             $res = json_decode($res->getContent());
             $assigners = $res->data;
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception("Not Found GET api/todo/{$id} with something wrong.");
         }
         $data = [
@@ -137,11 +140,31 @@ class PageController extends Controller
         }
 
         $data = [
-            'title' => 'Assigners workload List',
+            'title' => 'Assigners',
             'assigners' => $assigners
         ];
 
         return view('assigner/all', $data);
+    }
+
+    public function assigners_workload_list()
+    {
+        try {
+            // take all assigners
+            $req = Request::create(url('api/assigner'), 'GET');
+            $res = Route::dispatch($req);
+            $res = json_decode($res->getContent());
+            $assigners = Assigner::hydrate($res->data);
+        } catch (\Exception $e) {
+            throw new \Exception('Call GET api/assigner/ with something wrong.');
+        }
+
+        $data = [
+            'title' => 'Assigners workload List',
+            'assigners' => $assigners
+        ];
+
+        return view('assigner/workload_list', $data);
     }
 
     public function assigner_create()
@@ -163,8 +186,7 @@ class PageController extends Controller
             $res = Route::dispatch($req);
             $res = json_decode($res->getContent());
             $assigner = $res->data;
-        } 
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             throw new \Exception("Not Found GET api/todo/{$id} with something wrong.");
         }
         $data = [

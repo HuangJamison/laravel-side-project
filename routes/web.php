@@ -31,7 +31,8 @@ Route::get('/todo/edit/{id}', [PageController::class, 'todo_edit']);
 
 Route::get('/assigners', [PageController::class, 'assigners']);
 
+Route::get('/assigners_workload_list', [PageController::class, 'assigners_workload_list']);
+
 Route::get('/assigner/create', [PageController::class, 'assigner_create']);
 
 Route::get('/assigner/edit/{id}', [PageController::class, 'assigner_edit']);
-

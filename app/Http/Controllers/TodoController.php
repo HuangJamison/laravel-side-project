@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Interfaces\TodoRepositoryInterface;
 use App\Http\Resources\TodoResource;
 use App\Http\Requests\TodoRequest;
+use App\Interfaces\AssignerRepositoryInterface;
 use Carbon\Carbon;
 
 class TodoController extends Controller
@@ -35,21 +37,39 @@ class TodoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(TodoRequest $request): JsonResponse
+    public function store(TodoRequest $request, AssignerRepositoryInterface $assignerRepository): JsonResponse
     {
-        // store 前即檢查
-        $storeData = $request->only([
-            'content',
-            'assigner_id',
-            'deadline',
-            'working_hours'
-        ]);
-        $todo = $this->todoRepository->createTodo($storeData);
-
-        if (is_null($todo)) {
-            throw new \Exception('Can not store todo data.');
+        try {
+            // store 前即檢查
+            $storeData = $request->only([
+                'content',
+                'assigner_id',
+                'deadline',
+                'working_hours',
+                'assign_method'
+            ]);
+            // automatic, random 幫其填上 assigner_id
+            if ($storeData['assign_method'] === 'automatic') {
+                $effortlessAssigner = $assignerRepository->getMinWorkloadAssigner()->toArray();
+                $storeData['assigner_id'] = $effortlessAssigner['id'];
+            } elseif ($storeData['assign_method'] === 'random') {
+                $activeAssigners = $assignerRepository->getAllActiveAssigners()->toArray();
+                $assignerIds = array_column($activeAssigners, 'id');
+                $chosen_index = rand(0, count($assignerIds) - 1);
+                $storeData['assigner_id'] = $assignerIds[$chosen_index];
+            }
+            unset($storeData['assign_method']);
+            if (empty($storeData['assigner_id'])) {
+                throw new \Exception('Plz choose an assigner!');
+            }
+            $todo = $this->todoRepository->createTodo($storeData);
+            if (is_null($todo)) {
+                throw new \Exception('Can not store todo data.');
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('Call GET api/todo/ with something wrong.');
         }
-        
+
         return response()->json([
             "message" => "ok",
             "data" => new TodoResource($todo)
