@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Str;
-$DATABASE_URL=parse_url(env('DATABASE_URL'));
+
+$DATABASE_URL = parse_url(env('DATABASE_URL')); // 上線 heroku 需加入
 return [
 
     /*
@@ -15,7 +16,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', 'pgsql'), // 依照不同 db 改
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +123,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

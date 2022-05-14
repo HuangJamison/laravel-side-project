@@ -23,46 +23,46 @@
             <th>button</th>
         </tr>
         @foreach ($todos as $todo)
-            <tr>
-                <td>
-                    {{ $todo->id }}
-                </td>
-                <td>
-                    {{ $todo->content ?? '' }}
-                </td>
-                <td>
-                    {{ $todo->assigner->name ?? '' }}
-                </td>
-                <td>
-                    {{ $todo->working_hours ?? '' }}
-                </td>
-                <td>
-                    {{ $todo->deadline ?? '' }}
-                </td>
-                <td>
-                    {{ $todo->is_completed ? 'yes' : 'no' }}
-                </td>
-                <td>
-                    {{ $todo->completed_at ?? 'none' }}
-                </td>
-                <td>
-                    {{ $todo->is_deleted ? 'yes' : 'no' }}
-                </td>
-                <td>
-                    {{ $todo->deleted_at ?? 'none' }}
-                </td>
-                <td>
-                    {{ $todo->updated_at ? date('Y-m-d H:i:s', strtotime($todo->updated_at)) : 'none' }}
-                </td>
-                <td>
-                    {{ $todo->created_at ? date('Y-m-d H:i:s', strtotime($todo->updated_at)) : 'none' }}
-                </td>
-                <td>
-                    <a target="_blank" href="{{ url('todo/edit/') . '/' . $todo->id }}">
-                        edit
-                    </a> 
-                </td>
-            </tr>
+        <tr>
+            <td>
+                {{ $todo->id }}
+            </td>
+            <td>
+                {{ $todo->content ?? '' }}
+            </td>
+            <td>
+                {{ $todo->assigner->name ?? '' }}
+            </td>
+            <td>
+                {{ $todo->working_hours ?? '' }}
+            </td>
+            <td>
+                {{ $todo->deadline ?? '' }}
+            </td>
+            <td>
+                {{ $todo->is_completed ? 'yes' : 'no' }}
+            </td>
+            <td>
+                {{ $todo->completed_at ?? 'none' }}
+            </td>
+            <td>
+                {{ $todo->is_deleted ? 'yes' : 'no' }}
+            </td>
+            <td>
+                {{ $todo->deleted_at ?? 'none' }}
+            </td>
+            <td>
+                {{ $todo->updated_at ? date('Y-m-d H:i:s', strtotime($todo->updated_at)) : 'none' }}
+            </td>
+            <td>
+                {{ $todo->created_at ? date('Y-m-d H:i:s', strtotime($todo->updated_at)) : 'none' }}
+            </td>
+            <td>
+                <a target="_blank" href="{{ url('todo/edit/') . '/' . $todo->id }}">
+                    edit
+                </a>
+            </td>
+        </tr>
         @endforeach
-    </div>
+</div>
 </div>
